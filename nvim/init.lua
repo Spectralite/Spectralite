@@ -154,8 +154,16 @@ require('lazy').setup({
     -- VimTeX configuration goes here, e.g.
     vim.g.vimtex_view_method = "SumatraPDF"
   end
-}
+        },
+        {
+    'goolord/alpha-nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function ()
+        require'alpha'.setup(require'alpha.themes.startify'.config)
+    end
+};
 }, {})
+
 require("luasnip").config.set_config({ -- Setting LuaSnip config
   -- Enable autotriggered snippets
   enable_autosnippets = true,
