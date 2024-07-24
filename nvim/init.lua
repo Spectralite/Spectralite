@@ -1,36 +1,36 @@
 --NOTE: [***** CP-STUFF *****]
 vim.opt.number = true
-vim.opt.shiftwidth = 4        -- Number of spaces for each step of autoindet
-vim.opt.tabstop = 4        -- Number of spaces a tab counts for
-vim.opt.softtabstop = 4       -- Number of spaces a tab counts for while editing
-vim.opt.autoindent = true     -- Copy indent from current line when starting a new line
+vim.opt.tabstop = 4        
+vim.opt.softtabstop = 4      
+vim.opt.autoindent = true    
 vim.opt.expandtab = true
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.undofile = true
 vim.opt.cursorline = true
+vim.cmd('filetype plugin indent on')
 -- Basic-Autocompletion
--- Curly braces
 vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
 vim.keymap.set('i', '{<CR>', '{<CR>}<Esc>O', { noremap = true })
 vim.keymap.set('i', '{{', '{', { noremap = true })
 vim.keymap.set('i', '{}', '{}', { noremap = true })
--- Brackets
+
 vim.keymap.set('i', '[', '[]<Left>', { noremap = true })
 vim.keymap.set('i', '[<CR>', '[<CR>]<Esc>O', { noremap = true })
 vim.keymap.set('i', '[[', '[', { noremap = true })
 vim.keymap.set('i', '[]', '[]', { noremap = true })
--- Parentheses
+
 vim.keymap.set('i', '(', '()<Left>', { noremap = true })
 vim.keymap.set('i', '(<CR>', '(<CR>)<Esc>O', { noremap = true })
 vim.keymap.set('i', '((', '(', { noremap = true })
 vim.keymap.set('i', '()', '()', { noremap = true })
--- Quotation's
+
 vim.keymap.set('i', '"', '""<Left>', { noremap = true })
 vim.keymap.set('i', '""', '"', { noremap = true })
 vim.keymap.set('i', '$', function()
   vim.api.nvim_put({'$$'}, 'c', true, true)
   vim.api.nvim_input('<Left>')
 end, { noremap = true, silent = true })
+
 -- Highlight when yanking (copying) text
 vim.api.nvim_create_autocmd('TextYankPost', {
   desc = 'Highlight when yanking (copying) text',
@@ -40,7 +40,6 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   end,
 })
 --NOTE: [***** NON-CP Begins Here *****]
---  NOTE: Must happen before plugins are loaded (otherwise wrong leader will be used)
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.cmd[[
@@ -103,7 +102,39 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   -- NOTE: Plugins can be added with a link (or for a github repo: 'owner/repo' link).
   -- Use `opts = {}` to force a plugin to be loaded.
-      {
+  -- { -- Highlight, edit, and navigate code
+	  { 'nvim-treesitter/nvim-treesitter',
+    build = ':TSUpdate',
+    opts = {
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      -- Autoinstall languages that are not installed
+      auto_install = true,
+      highlight = {
+        enable = true,
+        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
+        --  If you are experiencing weird indenting issues, add the language to
+        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
+        additional_vim_regex_highlighting = { 'ruby' },
+      },
+      indent = { enable = true, disable = { 'ruby' } },
+    },
+    config = function(_, opts)
+      -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
+
+      -- Prefer git instead of curl in order to improve connectivity in some environments
+      require('nvim-treesitter.install').prefer_git = true
+      ---@diagnostic disable-next-line: missing-fields
+      require('nvim-treesitter.configs').setup(opts)
+
+      -- There are additional nvim-treesitter modules that you can use to interact
+      -- with nvim-treesitter. You should go explore a few and see what interests you:
+      --
+      --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
+      --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
+      --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+    end,
+  },
+             {
         'L3MON4D3/LuaSnip',
         build = (function()
           -- Build Step is needed for regex support in snippets.
