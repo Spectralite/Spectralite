@@ -1,9 +1,10 @@
 --NOTE: [***** CP-STUFF *****]
 vim.opt.number = true
-vim.opt.tabstop = 4        
-vim.opt.softtabstop = 4      
-vim.opt.autoindent = true    
-vim.opt.expandtab = true
+vim.opt.tabstop = 4      
+vim.opt.shiftwidth = 4    
+vim.opt.expandtab = true   
+vim.opt.smartindent = true  
+vim.opt.autoindent = true   
 vim.opt.clipboard = 'unnamedplus'
 vim.opt.undofile = true
 vim.opt.cursorline = true
@@ -42,6 +43,28 @@ vim.api.nvim_create_autocmd('TextYankPost', {
 --NOTE: [***** NON-CP Begins Here *****]
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
+-- Header configuration
+local header_config = {
+    name = "Spectric",  -- Replace with your actual name
+}
+
+local function insert_cpp_header()
+    local date = os.date("%d.%m.%Y")
+    local time = os.date("%H:%M:%S")
+    
+    local header = {
+        string.format('// %s - %s %s', header_config.name, date, time),
+    }
+    
+    vim.api.nvim_buf_set_lines(0, 0, 0, false, header)
+end
+
+vim.api.nvim_create_autocmd({"BufNewFile"}, {
+    pattern = "*.cpp",
+    callback = function()
+        insert_cpp_header()
+    end,
+})
 vim.cmd[[
 " Use Tab to expand and jump through snippets
 imap <silent><expr> <Tab> luasnip#expand_or_jumpable() ? '<Plug>luasnip-expand-or-jump' : '<Tab>' 
@@ -53,7 +76,6 @@ smap <silent><expr> <S-Tab> luasnip#jumpable(-1) ? '<Plug>luasnip-jump-prev' : '
 ]]
 -- Minimal number of screen lines to keep above and below the cursor.
 vim.opt.scrolloff = 10
-
 -- Case-insensitive searching UNLESS \C or one or more capital letters in the search term
 vim.opt.ignorecase = true
 vim.opt.smartcase = true
@@ -66,15 +88,8 @@ vim.opt.splitbelow = true
 vim.opt.inccommand = 'split'
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
-
-vim.opt.listchars = { tab = '» ', trail = '·', nbsp = '␣' }
-
 -- Enable mouse mode, can be useful for resizing splits for example!
 vim.opt.mouse = 'a'
-
--- Decrease update time
-vim.opt.updatetime = 250
-
 -- [[ Basic Autocommands ]]
 --  See `:help lua-guide-autocommands`
 ---- Diagnostic keymaps
@@ -88,6 +103,9 @@ vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left wind
 vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
 vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
 vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
+
+-- Map <leader>ps to open PowerShell in a horizontal split
+vim.api.nvim_set_keymap('n', '<leader>ps', ':vsplit | terminal pwsh<CR>', { noremap = true, silent = true })
 
 -- [[ Install `lazy.nvim` plugin manager ]]
 --    See `:help lazy.nvim.txt` or https://github.com/folke/lazy.nvim for more info
@@ -134,7 +152,7 @@ require('lazy').setup({
       --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
     end,
   },
-             {
+    {
         'L3MON4D3/LuaSnip',
         build = (function()
           -- Build Step is needed for regex support in snippets.
@@ -155,13 +173,6 @@ require('lazy').setup({
     vim.g.vimtex_view_method = "SumatraPDF"
   end
         },
-        {
-    'goolord/alpha-nvim',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function ()
-        require'alpha'.setup(require'alpha.themes.startify'.config)
-    end
-};
 }, {})
 
 require("luasnip").config.set_config({ -- Setting LuaSnip config
