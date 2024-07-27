@@ -8,7 +8,6 @@ vim.opt.shiftwidth = 4
 vim.opt.expandtab = true   
 vim.opt.smartindent = true  
 vim.opt.clipboard = 'unnamedplus'
--- Basic-Autocompletion
 vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
 vim.keymap.set('i', '{<CR>', '{<CR>}<Esc>O', { noremap = true })
 vim.keymap.set('i', '{{', '{', { noremap = true })
@@ -22,8 +21,8 @@ vim.keymap.set('i', '[]', '[]', { noremap = true })
 vim.keymap.set('i', '(', '()<Left>', { noremap = true })
 vim.keymap.set('i', '(<CR>', '(<CR>)<Esc>O', { noremap = true })
 vim.keymap.set('i', '((', '(', { noremap = true })
-vim.keymap.set('i', '()', '()', { noremap = true })
 
+vim.keymap.set('i', '()', '()', { noremap = true })
 vim.keymap.set('i', '"', '""<Left>', { noremap = true })
 vim.keymap.set('i', '""', '"', { noremap = true })
 vim.keymap.set('i', '$', function()
@@ -70,14 +69,10 @@ if not vim.loop.fs_stat(lazypath) then
   vim.fn.system { 'git', 'clone', '--filter=blob:none', '--branch=stable', lazyrepo, lazypath }
 end ---@diagnostic disable-next-line: undefined-field
 vim.opt.rtp:prepend(lazypath)
--- [[ Configure and install plugins ]]
 require('lazy').setup({
     {
         'L3MON4D3/LuaSnip',
         build = (function()
-          -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
           if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
             return
           end
@@ -86,10 +81,8 @@ require('lazy').setup({
       },
    
 }, {})
-require("luasnip").config.set_config({ -- Setting LuaSnip config
-  -- Enable autotriggered snippets
+require("luasnip").config.set_config({
   enable_autosnippets = true,
-  -- Use Tab (or some other key if you prefer) to trigger visual selection
   store_selection_keys = "<Tab>",
 })
 require("luasnip.loaders.from_lua").load({paths = "C:/Users/Eyobell/AppData/Local/nvim/LuaSnip"})
