@@ -1,7 +1,7 @@
 --[CP - SETUP]
-vim.opt.bg ="light"
+--vim.opt.bg ="light" 
 vim.opt.nu = true
-vim.opt.rnu= true
+vim.opt.rnu =  true
 vim.opt.cul = true
 vim.opt.ts = 4
 vim.opt.sw = 4
@@ -9,11 +9,19 @@ vim.opt.et = true
 vim.opt.si = true
 vim.opt.udf = true
 vim.opt.so = 10
-vim.opt.ic = true
+vim.opt.updatetime = 10000
+vim.opt.ignorecase = true
 vim.opt.wrap = false
-vim.opt.cb = "unnamedplus"
+vim.opt.mouse = 'a'
+vim.schedule(function()
+  vim.opt.clipboard = 'unnamedplus'
+end)
+vim.opt.inccommand = 'split'
+vim.opt.spr = true
+vim.opt.sb = true
 vim.keymap.set("i", "(", "()<left>", { noremap = true })
-vim.keymap.set("i", "{", "{}<left>", { noremap = true })
+vim.keymap.set('i', '{', '{}<Left>', { noremap = true })
+vim.keymap.set('i', '{<CR>', '{<CR>}<Esc>O', { noremap = true })
 vim.keymap.set("i", "[", "[]<left>", { noremap = true })
 vim.keymap.set("i", "\"", "\"\"<left>", { noremap = true })
 vim.keymap.set("i", "'", "''<left>", { noremap = true })
@@ -77,4 +85,3 @@ int main(){
 vim.api.nvim_put(vim.split(snippet, "\n"), "l", true, true)
 	return ""
 end
-
