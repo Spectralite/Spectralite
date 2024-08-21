@@ -13,6 +13,7 @@ vim.keymap.set("i", "[", "[]<left>", { noremap = true })
 vim.keymap.set("i", "\"", "\"\"<left>", { noremap = true })
 vim.keymap.set("i", "'", "''<left>", { noremap = true })
 
+vim.cmd[[autocmd BufNewFile *.cpp 0r C:\Users\Eyobell\CP\library\template.cpp]]
 vim.api.nvim_create_autocmd("BufNewFile", {
 	pattern = "*.cpp",
 	callback = function()
@@ -23,5 +24,3 @@ vim.api.nvim_create_autocmd("BufNewFile", {
 vim.api.nvim_set_keymap("n", "<SPACE>ps", ":vsplit | wincmd l | terminal pwsh<CR>", { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '>', ':vertical resize -5<CR>', { noremap = true, silent = true })
 vim.api.nvim_set_keymap('n', '<', ':vertical resize +5<CR>', { noremap = true, silent = true })
-vim.cmd[[autocmd BufNewFile *.cpp 0r C:\Users\Eyobell\CP\library\template.cpp]]
-
